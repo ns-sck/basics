@@ -1,0 +1,108 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+	int data;
+	Node *left, *right;
+};
+
+/* Helper function that allocates a new node
+with the given data and NULL left and right
+pointers. */
+Node* getNode(int data)
+{
+	Node* newNode = new Node;
+	newNode->data = data;
+	newNode->left = newNode->right = NULL;
+	return newNode;
+}
+
+// Function prototype for postorder traversal
+// of the given tree
+void postorderTraversal(Node*);
+
+// Function for the inorder traversal of the tree
+// so as to store the node values in 'arr' in
+// sorted order
+void inorderTraversal(Node* root, vector<int>& arr)
+{
+	if (root == NULL)
+		return;
+
+	// first recur on left subtree
+	inorderTraversal(root->left, arr);
+
+	// then copy the data of the node
+	arr.push_back(root->data);
+
+	// now recur for right subtree
+	inorderTraversal(root->right, arr);
+}
+
+void BSTToMaxHeap(Node* root, vector<int> &arr, int* i)
+{
+	if (root == NULL)
+		return;
+
+	// recur on left subtree
+	BSTToMaxHeap(root->left, arr, i);
+
+	// recur on right subtree
+	BSTToMaxHeap(root->right, arr, i);
+
+	// copy data at index 'i' of 'arr' to
+	// the node
+	root->data = arr[++*i]; 
+}
+
+// Utility function to convert the given BST to
+// MAX HEAP
+void convertToMaxHeapUtil(Node* root)
+{
+	// vector to store the data of all the
+	// nodes of the BST
+	vector<int> arr;
+	int i = -1;
+
+	// inorder traversal to populate 'arr'
+	inorderTraversal(root, arr);
+
+	// BST to MAX HEAP conversion
+	BSTToMaxHeap(root, arr, &i);
+}
+
+// Function to Print Postorder Traversal of the tree
+void postorderTraversal(Node* root)
+{
+	if (!root)
+		return;
+
+	// recur on left subtree
+	postorderTraversal(root->left);
+
+	// then recur on right subtree
+	postorderTraversal(root->right);
+
+	// print the root's data
+	cout << root->data << " ";
+}
+
+// Driver Code
+int main()
+{
+	// BST formation
+	Node* root = getNode(4);
+	root->left = getNode(2);
+	root->right = getNode(6);
+	root->left->left = getNode(1);
+	root->left->right = getNode(3);
+	root->right->left = getNode(5);
+	root->right->right = getNode(7);
+
+	convertToMaxHeapUtil(root);
+	cout << "Postorder Traversal of Tree:" << endl;
+	postorderTraversal(root);
+
+	return 0;
+}

@@ -1,0 +1,1 @@
+deletion(root, 5);
